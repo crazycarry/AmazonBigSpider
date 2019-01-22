@@ -35,7 +35,7 @@ import (
 // https://www.amazon.com/gp/new-releases/kitchen/1063916/ref=zg_bsnr_pg_3?ie=UTF8&pg=3&ajax=1
 func TestAsinDownload(t *testing.T) {
 	util.MakeDir(AmazonBigSpider.Dir + "/test/asin/")
-	ip := "*104.128.124.122:808"
+	ip := "104.128.124.122:808"
 	// debug info will no appear |nothing
 	spider.SetLogLevel("info")
 	url := "https://www.amazon.com/dp/B016L36UZI"
@@ -77,15 +77,40 @@ func TestAsinDownload(t *testing.T) {
 
 func TestListDownload(t *testing.T) {
 	util.MakeDir(AmazonBigSpider.Dir + "/test/list/")
-	ip := "104.128.124.122:808"
+	ip := "*a"
 	// debug info will no appear |nothing
 	spider.SetLogLevel("info")
 	url := "https://www.amazon.co.jp/gp/bestsellers/dvd/ref=zg_bs_nav_0"
 	content, err := Download(ip, url)
 	if err != nil {
 		fmt.Printf("%#v", err.Error())
+		return
 	}
-	util.SaveToFile(AmazonBigSpider.Dir+"/test/list/xxx2.html", content)
+	util.SaveToFile(AmazonBigSpider.Dir+"/test/list/jp.html", content)
+
+	url = "https://www.amazon.com/Best-Sellers-Computers-Accessories/zgbs/pc?_encoding=UTF8&pg=1&ajax=1"
+	content, err = Download(ip, url)
+	if err != nil {
+		fmt.Printf("%#v", err.Error())
+		return
+	}
+	util.SaveToFile(AmazonBigSpider.Dir+"/test/list/usa.html", content)
+
+	url = "https://www.amazon.co.uk/Best-Sellers-Business-Industry-Science/zgbs/industrial?_encoding=UTF8&pg=1&ajax=1"
+	content, err = Download(ip, url)
+	if err != nil {
+		fmt.Printf("%#v", err.Error())
+		return
+	}
+	util.SaveToFile(AmazonBigSpider.Dir+"/test/list/uk.html", content)
+
+	url = "https://www.amazon.de/gp/bestsellers/beauty?_encoding=UTF8&pg=1&ajax=1"
+	content, err = Download(ip, url)
+	if err != nil {
+		fmt.Printf("%#v", err.Error())
+		return
+	}
+	util.SaveToFile(AmazonBigSpider.Dir+"/test/list/de.html", content)
 }
 
 /*

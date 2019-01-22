@@ -52,28 +52,6 @@ vim /etc/hosts
 
 # 此后还要保证网络畅通, 提高ulimit的数量, 并且最好添加docker加速器
 
-# 拉代码
-mkdir -p ~/gocode/src/github.com/hunterhug
-cd ~/gocode/src/github.com/hunterhug
-git clone https://github.com/hunterhug/AmazonBigSpider
-git clone https://github.com/hunterhug/AmazonBigSpiderWeb
-
-# 启动MYSQL和Redis
-cd AmazonBigSpider/sh/docker
-chmod 777 ./build.sh
-./build
-
-#  检测是否安装成功
-docker ps
-docker exec -it GoSpider-redis redis-cli -a GoSpider
-redis> keys *  (Ctrl+C)
-
-docker exec -it GoSpider-mysqldb mysql -uroot -p459527502
-mysql> show databases;
-mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY '459527502'  WITH GRANT OPTION;
-       flush privileges;
-mysql> exit
-
 # scp go1.8压缩包到远程机器
 # scp xxxx.tar.gz  ssh@IP:
 # 安装golang1.8
@@ -92,6 +70,32 @@ export PATH=.:$PATH:$GOROOT/bin:$GOBIN
 
 source /etc/profile.d/myenv.sh
 go env
+
+# 拉代码
+mkdir -p ~/gocode/src/github.com/hunterhug
+cd ~/gocode/src/github.com/hunterhug
+git clone  https://github.com/hunterhug/AmazonBigSpider
+move AmazonBigSpider AmazonBigSpiderCode
+
+cd AmazonBigSpiderCode
+ln -s $(pwd)/backend $GOPATH/src/github.com/hunterhug/AmazonBigSpider
+ln -s $(pwd)/webend $GOPATH/src/github.com/hunterhug/AmazonBigSpiderWeb
+
+# 启动MYSQL和Redis
+cd AmazonBigSpider/sh/docker
+chmod 777 ./build.sh
+./build
+
+#  检测是否安装成功
+docker ps
+docker exec -it GoSpider-redis redis-cli -a GoSpider
+redis> keys *  (Ctrl+C)
+
+docker exec -it GoSpider-mysqldb mysql -uroot -p459527502
+mysql> show databases;
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'  IDENTIFIED BY '459527502'  WITH GRANT OPTION;
+       flush privileges;
+mysql> exit
 
 # 编译爬虫端二进制
 cd $GOPATH/src/github.com/hunterhug/AmazonBigSpider

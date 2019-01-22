@@ -58,6 +58,45 @@ func TestParselist(t *testing.T) {
 	}
 }
 
+func TestParselistJP(t *testing.T) {
+	SpiderType = JP
+	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/jp.html")
+	results, err := ParseList(bytecontent)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	for _, result := range results {
+		t.Logf("%v:%v", result, err)
+	}
+}
+
+func TestParselistUSA(t *testing.T) {
+	SpiderType = USA
+	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/usa.html")
+	results, err := ParseList(bytecontent)
+	for _, result := range results {
+		t.Logf("%v:%v", result, err)
+	}
+}
+
+func TestParselistDE(t *testing.T) {
+	SpiderType = DE
+	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/de.html")
+	results, err := ParseList(bytecontent)
+	for _, result := range results {
+		t.Logf("%v:%v", result, err)
+	}
+}
+
+func TestParselistUK(t *testing.T) {
+	SpiderType = UK
+	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/uk.html")
+	results, err := ParseList(bytecontent)
+	for _, result := range results {
+		t.Logf("%v:%v", result, err)
+	}
+}
 func TestParseRank(t *testing.T) {
 	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/xxx2.html")
 	doc, _ := expert.QueryBytes(bytecontent)
@@ -66,16 +105,9 @@ func TestParseRank(t *testing.T) {
 	t.Logf("%#v", ParseRank(test))
 }
 
-// sp_detail2
 func TestParsedd(t *testing.T) {
-	NewLog(AmazonBigSpider.Dir + "/config/usa_log.json")
-	SpiderType = USA
-	bytecontent, e := util.ReadfromFile(AmazonBigSpider.Dir + "/test/asin.html")
-	if e != nil {
-		fmt.Println(e.Error())
-	} else {
-		t.Logf("%#v", ParseDetail("/dp/dd", bytecontent))
-	}
+	bytecontent, _ := util.ReadfromFile(AmazonBigSpider.Dir + "/test/list/xxx2.html")
+	t.Logf("%#v", ParseDetail("/dp/dd", bytecontent))
 }
 
 func TestManyRank(t *testing.T) {

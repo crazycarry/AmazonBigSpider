@@ -23,7 +23,6 @@ import (
 	"github.com/hunterhug/parrot/util"
 	"regexp"
 	"strings"
-	"encoding/json"
 )
 
 func QueryBytes(content []byte) (*goquery.Document, error) {
@@ -50,7 +49,7 @@ func ParseList(content []byte) ([]map[string]string, error) {
 	if namelen > 3 {
 		id = nametemp[3]
 	}
-	goodclass := ".zg_itemImmersion"
+	goodclass := ".zg-item-immersion"
 	if SpiderType == JP {
 		goodclass = ".zg_itemRow"
 	}
@@ -104,6 +103,9 @@ func ParseList(content []byte) ([]map[string]string, error) {
 				}
 				temp["score"] = strings.TrimSpace(strings.Replace(temp["score"], "5", "", -1))
 				temp["reviews"] = strings.Replace(temp["reviews"], ",", "", -1)
+
+				//zg-badge-text
+				temp["smallrank"] = strings.TrimSpace(strings.Replace(strings.Replace(node.Find(".zg-badge-text").Text(), ".", "", -1), "#", "", -1))
 			} else if SpiderType == JP {
 				scoretemp := strings.Split(strings.Replace(score, "5つ星のうち ", "", -1), "\n")
 				temp["score"] = scoretemp[0]
@@ -112,6 +114,10 @@ func ParseList(content []byte) ([]map[string]string, error) {
 				}
 				temp["score"] = strings.TrimSpace(strings.Replace(temp["score"], " ", "", -1))
 				temp["reviews"] = strings.Replace(strings.Replace(temp["reviews"], " ", "", -1), ",", "", -1)
+
+				//zg-badge-text
+				temp["smallrank"] = strings.TrimSpace(strings.Replace(node.Find(".zg_rankNumber").Text(), ".", "", -1))
+
 			} else if SpiderType == DE {
 				scoretemp := strings.Split(strings.Replace(score, "von 5 Sternen", "", -1), "\n")
 				temp["reviews"] = "0"
@@ -122,6 +128,8 @@ func ParseList(content []byte) ([]map[string]string, error) {
 				temp["score"] = strings.TrimSpace(strings.Replace(temp["score"], " ", "", -1))
 				temp["score"] = strings.Replace(temp["score"], ",", ".", -1)
 				temp["reviews"] = strings.Replace(strings.Replace(temp["reviews"], " ", "", -1), ",", "", -1)
+
+				temp["smallrank"] = strings.TrimSpace(strings.Replace(strings.Replace(node.Find(".zg-badge-text").Text(), ".", "", -1), "#", "", -1))
 			}
 
 			if temp["reviews"] == "" {
@@ -138,8 +146,6 @@ func ParseList(content []byte) ([]map[string]string, error) {
 				temp["purl"] = v
 			}
 			temp["id"] = temp["asin"] + "|" + id
-
-			temp["smallrank"] = strings.TrimSpace(strings.Replace(node.Find(".zg_rankNumber").Text(), ".", "", -1))
 			temp["price"] = strings.TrimSpace(node.Find(".a-color-price").Text())
 			//fmt.Printf("%v:%v\n", temp["score"], temp["reviews"])
 			return
@@ -194,10 +200,6 @@ func Is404(content []byte) bool {
 
 func ParseDetail(url string, content []byte) map[string]string {
 	returnmap := map[string]string{}
-
-	if SpiderType == USA {
-		returnmap["relate"] = ParseRelated(content)
-	}
 	doc, _ := expert.QueryBytes(content)
 
 	// title bigname
@@ -258,7 +260,7 @@ func ParseDetail(url string, content []byte) map[string]string {
 		rank = ranktemp
 	}
 	returnmap["rank"] = util.IS(rank)
-	returnmap["createtime"] = util.GetSecond2DateTimes(util.GetSecondTimes())
+	returnmap["createtime"] = util.GetSecord2DateTimes(util.GetSecordTimes())
 
 	//purl
 	purl := ""
@@ -394,27 +396,6 @@ func ParseRank(content string) []string {
 		}
 		return back
 	}
-}
-
-func ParseRelated(content []byte) string {
-	doc, _ := expert.QueryBytes(content)
-	back := ""
-	temp, _ := doc.Find("#sp_detail2").Attr("data-a-carousel-options")
-	if temp != "" {
-		var i map[string]interface{}
-		err := json.Unmarshal([]byte(temp), &i)
-		if err != nil {
-			//fmt.Println(err.Error())
-			return back
-		}
-
-		if v, ok := i["initialSeenAsins"]; ok {
-			vv, _ := json.Marshal(v)
-			back = string(vv)
-		}
-	}
-
-	return back
 }
 
 func BigReallyName(name string) string {
