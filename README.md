@@ -129,16 +129,6 @@
 
 本产品遵循`署名-非商业性使用-禁止演绎 4.0 国际`。您可用于教育，学习，但不可用于商业盈利。
 
-如果这个产品有帮助到你,可以抛出请我吃下辣条吗?
-
-微信
-
-![微信](https://raw.githubusercontent.com/hunterhug/hunterhug.github.io/master/static/jpg/wei.png)
-
-支付宝
-
-![支付宝](https://raw.githubusercontent.com/hunterhug/hunterhug.github.io/master/static/jpg/ali.png)
-
 关于版权，爬虫有风险, 本人不承担由此开源项目带来的任何责任。
 
 ```
@@ -166,3 +156,13 @@
 4. 配套的`UI`网站端可以有更好的用户体验, 目前基本可以满足选款的需求, 商品的各种数据优美的显示出来.
 
 由于精力有限,所以此项目不再维护.
+
+## 支持
+
+微信支持:
+
+![](/support/weixin.jpg)
+
+支付宝支持:
+
+![](/support/alipay.png)
