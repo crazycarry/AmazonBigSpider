@@ -260,7 +260,7 @@ func ParseDetail(url string, content []byte) map[string]string {
 		rank = ranktemp
 	}
 	returnmap["rank"] = util.IS(rank)
-	returnmap["createtime"] = util.GetSecord2DateTimes(util.GetSecordTimes())
+	returnmap["createtime"] = util.GetSecond2DateTimes(util.GetSecondTimes())
 
 	//purl
 	purl := ""
